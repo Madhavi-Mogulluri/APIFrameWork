@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="API Regression Test Suite" verbose="4">
+
+<listeners>
+    <listener class-name="com.aventstack.chaintest.plugins.ChainTestListener" />
+<!--    <listener class-name="com.api.listeners.AnnotationTransformer"></listener>-->
+</listeners>
+
+    <test name="Go Rest API Test - Get User">
+        <classes>
+            <class name="com.api.gorestApi.GetUserTest" />
+        </classes>
+    </test>
+
+    <test name="Go Rest API Test - Create User">
+        <classes>
+            <class name="com.api.gorestApi.CreateUserTest" />
+        </classes>
+    </test>
+
+    <test name="Go Rest API Test - Update User">
+        <classes>
+            <class name="com.api.gorestApi.UpdateUserTest" />
+        </classes>
+    </test>
+
+    <test name="Go Rest API Test - Delete User">
+        <classes>
+            <class name="com.api.gorestApi.DeleteUserTest" />
+        </classes>
+    </test>
+
+    <test name="Go Rest API Test - Create User with Deserialization">
+        <classes>
+            <class name="com.api.gorestApi.CreateUserwithDeserialization" />
+        </classes>
+    </test>
+
+    <test name="Schema Test">
+        <classes>
+            <class name="com.api.gorestApi.SchemaTest" />
+        </classes>
+    </test>
+
+<!--    <test name="Basic Auth API Test">-->
+<!--        <classes>-->
+<!--            <class name="com.api.AuthTest.AuthApiTest" />-->
+<!--        </classes>-->
+<!--    </test>-->
+
+<!--    <test name="Spotify OAuth API Test">-->
+<!--        <classes>-->
+<!--            <class name="com.api.AuthTest.Oauth2Test" />-->
+<!--        </classes>-->
+<!--    </test>-->
+
+<!--    <test name="Google Gemini LLM Test">-->
+<!--        <classes>-->
+<!--            <class name="com.api.AuthTest.APIKey" />-->
+<!--        </classes>-->
+<!--    </test>-->
+
+</suite>
