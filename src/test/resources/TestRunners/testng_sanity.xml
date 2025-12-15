@@ -20,6 +20,11 @@
 <!--            <class name="com.api.AuthTest.Oauth2Test" />-->
 <!--        </classes>-->
 <!--    </test>-->
+    <test name="Go Rest API Test - Update User">
+        <classes>
+            <class name="com.api.gorestApi.UpdateUserTest" />
+        </classes>
+    </test>
 
 
 
