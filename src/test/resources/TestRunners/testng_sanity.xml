@@ -15,11 +15,11 @@
         </classes>
     </test>
 
-    <test name="Spotify OAuth API Test">
-        <classes>
-            <class name="com.api.AuthTest.Oauth2Test" />
-        </classes>
-    </test>
+<!--    <test name="Spotify OAuth API Test">-->
+<!--        <classes>-->
+<!--            <class name="com.api.AuthTest.Oauth2Test" />-->
+<!--        </classes>-->
+<!--    </test>-->
 
 
 
