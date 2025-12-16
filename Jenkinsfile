@@ -36,7 +36,7 @@ pipeline
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
-                    sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=dev"
+                    sh "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=dev"
 
                 }
             }
@@ -54,8 +54,8 @@ pipeline
         stage('Run Regression API Automation Tests on QA') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git.git'
-                    sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml -Denv=qa"
+                    git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
+                    sh "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_regression.xml -Denv=qa"
 
                 }
             }
@@ -99,25 +99,13 @@ pipeline
         stage('Sanity API Automation Test on PROD') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git.git'
-                    sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=prod"
+                    git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
+                    sh "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=prod"
 
                 }
             }
         }
-         stage('Publish Allure Reports') {
-                   steps {
-                        script {
-                            allure([
-                                includeProperties: false,
-                                jdk: '',
-                                properties: [],
-                                reportBuildPolicy: 'ALWAYS',
-                                results: [[path: '/allure-results']]
-                            ])
-                        }
-                    }
-                }
+
 
 
     }
