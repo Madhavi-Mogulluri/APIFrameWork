@@ -9,22 +9,12 @@
         </classes>
     </test>
 
-    <test name="Basic Auth API Test">
+    <test name="Go Rest API Test - Create User with Deserialization">
         <classes>
-            <class name="com.api.AuthTest.AuthApiTest" />
+            <class name="com.api.gorestApi.CreateUserwithDeserialization" />
         </classes>
     </test>
 
-<!--    <test name="Spotify OAuth API Test">-->
-<!--        <classes>-->
-<!--            <class name="com.api.AuthTest.Oauth2Test" />-->
-<!--        </classes>-->
-<!--    </test>-->
-    <test name="Go Rest API Test - Update User">
-        <classes>
-            <class name="com.api.gorestApi.UpdateUserTest" />
-        </classes>
-    </test>
 
 
 

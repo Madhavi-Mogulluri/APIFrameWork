@@ -1,72 +1,100 @@
 pipeline {
-  agent any tools {
-    maven 'maven'
-  }
-  stages {
-    stage('Build') {
-      steps {
-        git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-        sh "mvn -Dmaven.test.failure.ignore=true clean package"
-      }
-      post {
-        success {
-          junit '**/target/surefire-reports/TEST-*.xml'
-          archiveArtifacts 'target/*.jar'
+    agent any
+
+    tools {
+        maven 'maven'
+    }
+
+    stages {
+
+        stage('Build Sample Project') {
+            steps {
+                dir('sample-project') {
+                    git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                    sh 'mvn clean package'
+                }
+            }
         }
-      }
-    }
-    stage("Deploy to Dev") {
-      steps {
-        echo("deploy to Dev")
-      }
-    }
-    stage('Run Sanity API Automation Test on DEV') {
-      steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-          git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
-          sh "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=dev"
+
+        stage('Checkout API Framework') {
+            steps {
+                dir('api-framework') {
+                    git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
+                }
+            }
         }
-      }
-    }
-    stage("Deploy to QA") {
-      steps {
-        echo("deploy to qa done")
-      }
-    }
-    stage('Run Regression API Automation Tests on QA') {
-      steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-          git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
-          sh "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_regression.xml -Denv=qa"
+
+        stage('Deploy to DEV') {
+            steps {
+                echo 'Deploy to DEV'
+            }
         }
-      }
-    }
-    stage('Publish Allure Reports') {
-      steps {
-        script {
-          allure([includeProperties: false, jdk: '', properties: [], reportBuildPolicy: 'ALWAYS', results: [
-            [path: '/allure-results']
-          ]])
+
+        stage('Run Sanity API Tests on DEV') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    dir('api-framework') {
+                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=dev'
+                    }
+                }
+            }
         }
-      }
-    }
-    stage('Publish ChainTest HTML Report') {
-      steps {
-        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'target/chaintest', reportFiles: 'Index.html', reportName: 'HTML API Regression ChainTest Report on QA', reportTitles: 'API Test HTML Report'])
-      }
-    }
-    stage("Deploy to PROD") {
-      steps {
-        echo("deploy to PROD")
-      }
-    }
-    stage('Sanity API Automation Test on PROD') {
-      steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-          git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
-          sh "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=prod"
+
+        stage('Deploy to QA') {
+            steps {
+                echo 'Deploy to QA'
+            }
         }
-      }
+
+        stage('Run Regression API Tests on QA') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    dir('api-framework') {
+                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_regression.xml -Denv=qa'
+                    }
+                }
+            }
+        }
+
+        stage('Publish Allure Reports') {
+            steps {
+                dir('api-framework') {
+                    allure([
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'allure-results']]
+                    ])
+                }
+            }
+        }
+
+        stage('Publish ChainTest HTML Report') {
+            steps {
+                dir('api-framework') {
+                    publishHTML([
+                        allowMissing: false,
+                        keepAll: true,
+                        reportDir: 'target/chaintest',
+                        reportFiles: 'Index.html',
+                        reportName: 'API Regression ChainTest Report (QA)'
+                    ])
+                }
+            }
+        }
+
+        stage('Deploy to PROD') {
+            steps {
+                echo 'Deploy to PROD'
+            }
+        }
+
+        stage('Run Sanity API Tests on PROD') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    dir('api-framework') {
+                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=prod'
+                    }
+                }
+            }
+        }
     }
-  }
 }
