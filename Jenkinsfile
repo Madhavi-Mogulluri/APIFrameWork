@@ -7,98 +7,83 @@ pipeline {
 
     stages {
 
-        stage('Build Sample Project') {
-            steps {
-                dir('sample-project') {
-                    git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
-                    sh 'mvn clean package'
-                }
-            }
-        }
-
         stage('Checkout API Framework') {
             steps {
-                dir('api-framework') {
-                    git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
-                }
+                git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
             }
         }
 
         stage('Deploy to DEV') {
             steps {
-                echo 'Deploy to DEV'
+                echo 'Deploying application to DEV environment'
             }
         }
 
         stage('Run Sanity API Tests on DEV') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    dir('api-framework') {
-                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/Testrunners/testng_sanity.xml -Denv=dev'
-                    }
+                    sh 'mvn clean test -DsuiteXmlFile=src/test/resources/Testrunners/testng_sanity.xml -Denv=dev'
                 }
             }
         }
 
         stage('Deploy to QA') {
             steps {
-                echo 'Deploy to QA'
+                echo 'Deploying application to QA environment'
             }
         }
 
         stage('Run Regression API Tests on QA') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    dir('api-framework') {
-                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/Testrunners/testng_regression.xml -Denv=qa'
-                    }
+                    sh 'mvn clean test -DsuiteXmlFile=src/test/resources/Testrunners/testng_regression.xml -Denv=qa'
                 }
             }
         }
 
         stage('Publish Allure Reports') {
             steps {
-                dir('api-framework') {
-                    script {
-                        allure([
-                            reportBuildPolicy: 'ALWAYS',
-                            results: [[path: 'allure-results']]
-                        ])
-                    }
+                script {
+                    allure([
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'allure-results']]
+                    ])
                 }
             }
         }
 
         stage('Publish ChainTest HTML Report') {
             steps {
-                dir('api-framework') {
-                    script {
-                        publishHTML([
-                            allowMissing: false,
-                            keepAll: true,
-                            reportDir: 'target/chaintest',
-                            reportFiles: 'Index.html',
-                            reportName: 'API Regression ChainTest Report (QA)'
-                        ])
-                    }
+                script {
+                    publishHTML([
+                        allowMissing: false,
+                        keepAll: true,
+                        reportDir: 'target/chaintest',
+                        reportFiles: 'Index.html',
+                        reportName: 'API Automation Report (QA)'
+                    ])
                 }
             }
         }
 
         stage('Deploy to PROD') {
             steps {
-                echo 'Deploy to PROD'
+                echo 'Deploying application to PROD environment'
             }
         }
 
         stage('Run Sanity API Tests on PROD') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    dir('api-framework') {
-                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/Testrunners/testng_sanity.xml -Denv=prod'
-                    }
+                    sh 'mvn clean test -DsuiteXmlFile=src/test/resources/Testrunners/testng_sanity.xml -Denv=prod'
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline execution completed'
         }
     }
 }
