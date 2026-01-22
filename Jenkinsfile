@@ -9,7 +9,8 @@ pipeline {
 
         stage('Checkout API Framework') {
             steps {
-                git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
+                git branch: 'main',
+                    url: 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
             }
         }
 
