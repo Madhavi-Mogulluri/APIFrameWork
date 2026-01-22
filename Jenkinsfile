@@ -59,10 +59,12 @@ pipeline {
         stage('Publish Allure Reports') {
             steps {
                 dir('api-framework') {
-                    allure([
-                        reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'allure-results']]
-                    ])
+                    script {
+                        allure([
+                            reportBuildPolicy: 'ALWAYS',
+                            results: [[path: 'allure-results']]
+                        ])
+                    }
                 }
             }
         }
@@ -70,13 +72,15 @@ pipeline {
         stage('Publish ChainTest HTML Report') {
             steps {
                 dir('api-framework') {
-                    publishHTML([
-                        allowMissing: false,
-                        keepAll: true,
-                        reportDir: 'target/chaintest',
-                        reportFiles: 'Index.html',
-                        reportName: 'API Regression ChainTest Report (QA)'
-                    ])
+                    script {
+                        publishHTML([
+                            allowMissing: false,
+                            keepAll: true,
+                            reportDir: 'target/chaintest',
+                            reportFiles: 'Index.html',
+                            reportName: 'API Regression ChainTest Report (QA)'
+                        ])
+                    }
                 }
             }
         }
