@@ -119,7 +119,7 @@ public class RestClient {
 		
 		Response  response= request.urlEncodingEnabled(false)
 							.get(endpoint)
-							.then().log().all()
+							.then()
 							.spec(responsespec200or404)
 							.extract()
 							.response();
@@ -155,7 +155,6 @@ public class RestClient {
 	 * this method accepts file type body and creation
 	 * @param baseUrl
 	 * @param endpoint
-	 * @param body
 	 * @param authType
 	 * @param contentType
 	 * @return
@@ -215,12 +214,14 @@ public class RestClient {
 		RequestSpecification request = setUpRequest(baseUrl,authType,contentType);
 		
 		request.urlEncodingEnabled(false).body(body);
-		
+
+
 	Response response =	request.put(endpoint)
 					.then().log().all()
 					.spec(responsespec200or404)
 					.extract()
 					.response();
+
 	
 	return response;
 	}

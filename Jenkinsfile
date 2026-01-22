@@ -34,7 +34,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     dir('api-framework') {
-                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=dev'
+                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/Testrunners/testng_sanity.xml -Denv=dev'
                     }
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     dir('api-framework') {
-                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_regression.xml -Denv=qa'
+                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/Testrunners/testng_regression.xml -Denv=qa'
                     }
                 }
             }
@@ -91,7 +91,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     dir('api-framework') {
-                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=prod'
+                        sh 'mvn clean test -DsuiteXmlFile=src/test/resources/Testrunners/testng_sanity.xml -Denv=prod'
                     }
                 }
             }

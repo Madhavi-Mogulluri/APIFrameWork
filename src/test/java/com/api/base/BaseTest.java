@@ -1,7 +1,9 @@
 package com.api.base;
 
 import com.api.manager.ConfigManager;
+import com.api.mocking.MockSetUp;
 import com.aventstack.chaintest.plugins.ChainTestListener;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
 
@@ -28,7 +30,7 @@ public class BaseTest {
 	protected static final String FAKESTORE_BASE_URL = "https://fakestoreapi.com/";
 	protected static final String GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/";
 
-	
+    protected static final String BASE_URL_MOCK = "http://localhost:9099";
 	
 	
 	
@@ -45,9 +47,11 @@ public class BaseTest {
 	
 	
 	@BeforeTest
-	public void setUp() {	
+	public void setUp() {
+
+        MockSetUp.startWireMockServer();
 		restClient = new RestClient();
-		
+
 	};
 	
 	@BeforeSuite
@@ -55,6 +59,12 @@ public class BaseTest {
         GOREST_BASE_URL = ConfigManager.get("baseurl.gorest");
 		RestAssured.filters(new AllureRestAssured());
 	}
+
+    @AfterTest
+    public void shutdownMockServer(){
+        MockSetUp.stopWireMockServer();
+
+    }
 	
 
 }
