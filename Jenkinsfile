@@ -10,7 +10,7 @@ pipeline {
         stage('Build Sample Project') {
             steps {
                 dir('sample-project') {
-                    git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                    git 'https://github.com/Madhavi-Mogulluri/APIFrameWork.git'
                     sh 'mvn clean package'
                 }
             }
